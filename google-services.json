@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "344342272741",
+    "firebase_url": "https://trade-signal-app-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "trade-signal-app",
+    "storage_bucket": "trade-signal-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:344342272741:android:b6408d9fc74fae443f920c",
+        "android_client_info": {
+          "package_name": "com.munaffazlani.tradingbreakoutssignalsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "344342272741-6c55o0181g7uev9u04sa613c2lvtt3kl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_P1jdPp-NbuAIFmUZbpTAFcRCR4xLqKc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "344342272741-6c55o0181g7uev9u04sa613c2lvtt3kl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
