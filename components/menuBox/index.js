@@ -21,6 +21,9 @@ const MenuBox = ({ data }) => {
           image={data.image}
           style={{ borderRadius: 20 }}
         ></Image>
+        <View>
+          <Text>hello</Text>
+        </View>
       </View>
     </TouchableOpacity>
   );

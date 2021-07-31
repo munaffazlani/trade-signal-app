@@ -7,6 +7,29 @@ import { useNavigation } from "@react-navigation/native";
 const SignalBox = ({ data }) => {
   const navigation = useNavigation();
   const date = data.timestamp.toDate();
+  const minuteString = date.getMinutes().toString();
+  const secondString = date.getSeconds().toString();
+  let hourAndAMPM = date
+    .toLocaleString("en-US", {
+      hour: "numeric",
+      hour12: true,
+    })
+    .split(" ");
+
+  const hour =
+    hourAndAMPM[0].length > 1 ? hourAndAMPM[0] : `0${hourAndAMPM[0]}`;
+  const minute = minuteString.length > 1 ? minuteString : `0${minuteString}`;
+  const second = secondString.length > 1 ? secondString : `0${secondString}`;
+
+  const today = new Date();
+  const yesterday = new Date();
+  yesterday.setDate(today.getDate() - 1);
+  const day =
+    today.toDateString() === date.toDateString()
+      ? "Today"
+      : yesterday.toDateString() === date.toDateString()
+      ? "Yesterday"
+      : date.toDateString();
   return (
     <TouchableOpacity
       delayPressIn={100}
@@ -26,7 +49,7 @@ const SignalBox = ({ data }) => {
         </View>
         <Text
           style={styles.dateTime}
-        >{`${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`}</Text>
+        >{` ${day}, ${hour}:${minute}:${second} ${hourAndAMPM[1]}`}</Text>
       </ShadowBox>
     </TouchableOpacity>
   );

@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { FlatList } from "react-native";
 import SignalBox from "../signalBox";
-import { database, firestore } from "../../configs/firebase";
-import { CacheManager } from "react-native-expo-image-cache";
+import Loader from "../Loader";
+import { firestore } from "../../configs/firebase";
 
-const SignalList = () => {
+const SignalList = ({ route }) => {
+  const { id } = route.params;
   const [signals, setsignals] = useState([]);
   const [lastVisible, setLastVisible] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const getSignals = () => {
+    setLoading(true);
     const signalRef = firestore
-      .collection("signals")
-      .orderBy("timestamp")
+      .collection("groups")
+      .doc(id)
+      .collection("allSignals")
       .limit(5);
     signalRef.onSnapshot((querySnapshot) => {
       const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
@@ -20,19 +24,21 @@ const SignalList = () => {
       querySnapshot.forEach((doc) => {
         signals.push(doc.data());
       });
+      setLoading(false);
       setsignals(signals);
       setLastVisible(lastVisible);
     });
   };
-
   const getMoreSignals = () => {
     if (lastVisible) {
       const signalRef = firestore
-        .collection("signals")
-        .orderBy("timestamp")
+        .collection("groups")
+        .doc(id)
+        .collection("allSignals")
         .startAfter(lastVisible)
         .limit(5);
-      signalRef.onSnapshot((querySnapshot) => {
+
+      signalRef.get().then((querySnapshot) => {
         const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
 
         var signals = [];
@@ -48,18 +54,22 @@ const SignalList = () => {
   useEffect(() => {
     getSignals();
   }, []);
-  console.log(signals);
+  if (loading) {
+    return <Loader />;
+  }
   return (
-    <FlatList
-      data={signals}
-      onEndReachedThreshold={0.1}
-      onEndReached={() => getMoreSignals()}
-      keyExtractor={(item, index) => index.toString()}
-      scrollEventThrottle={150}
-      renderItem={(data) => {
-        return <SignalBox data={data.item} />;
-      }}
-    />
+    <>
+      <FlatList
+        data={signals}
+        onEndReachedThreshold={0.1}
+        onEndReached={() => getMoreSignals()}
+        keyExtractor={(item, index) => index.toString()}
+        scrollEventThrottle={150}
+        renderItem={(data) => {
+          return <SignalBox data={data.item} />;
+        }}
+      />
+    </>
   );
 };
 

@@ -8,6 +8,7 @@ import MenuBox from "../components/menuBox";
 import SignalDetail from "../components/signalDetail";
 import { database } from "../configs/firebase";
 import { CacheManager } from "react-native-expo-image-cache";
+import GroupList from "../components/groupList";
 
 const SignalStack = createStackNavigator();
 // import RteContainer from "./rte.style.js";
@@ -42,33 +43,22 @@ const SignalView = () => {
     },
   };
   return (
-    <NavigationContainer theme={MyTheme} initialRouteName="menuScreen">
+    <NavigationContainer>
       <SignalStack.Navigator>
-        <SignalStack.Screen name="menuScreen" options={{ title: "Markets" }}>
-          {() => (
-            <FlatList
-              numColumns={2}
-              columnWrapperStyle={{ marginBottom: 10, marginTop: 10 }}
-              data={menu}
-              style={{ flex: 1 }}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={(item) => {
-                return <MenuBox data={item.item} />;
-                r;
-              }}
-            />
-          )}
-        </SignalStack.Screen>
+        <SignalStack.Screen
+          name="menuScreen"
+          options={{ title: "Markets" }}
+          component={GroupList}
+        />
         <SignalStack.Screen
           name="signalList"
           options={({ route }) => {
             return {
-              title: route.params,
+              title: route.params.title,
             };
           }}
-        >
-          {() => <SignalList />}
-        </SignalStack.Screen>
+          component={SignalList}
+        />
         <SignalStack.Screen
           name="signalDetail"
           component={SignalDetail}
