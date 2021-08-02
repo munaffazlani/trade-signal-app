@@ -15,8 +15,11 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
+      "bundleIdentifier": "com.munaffazlani.tradingbreakoutssignalsiosapp",
+      "buildNumber": "1.0.0",
       "supportsTablet": true
     },
+    
     "android": {
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {

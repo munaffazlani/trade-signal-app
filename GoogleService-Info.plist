@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>344342272741-4loeo6l2i9c1feblr68i8fsg0f1r027a.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.344342272741-4loeo6l2i9c1feblr68i8fsg0f1r027a</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>344342272741-bu36tf36hn5o3jrofhad3ps6e8ooqt0e.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAKQoVPgrmVlzhDq-9HdkfJseht5EmkHlI</string>
+	<key>GCM_SENDER_ID</key>
+	<string>344342272741</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.munaffazlani.tradingbreakoutssignalsiosapp</string>
+	<key>PROJECT_ID</key>
+	<string>trade-signal-app</string>
+	<key>STORAGE_BUCKET</key>
+	<string>trade-signal-app.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:344342272741:ios:718a1b1a21688d263f920c</string>
+	<key>DATABASE_URL</key>
+	<string>https://trade-signal-app-default-rtdb.asia-southeast1.firebasedatabase.app</string>
+</dict>
+</plist>

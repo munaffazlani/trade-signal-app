@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { FlatList } from "react-native";
+import { FlatList, Text, View, TouchableOpacity } from "react-native";
 import SignalBox from "../signalBox";
+import { handleSubscription } from "../../utils/handleSubscription";
+import { getData } from "../../utils/asyncStorageMethods";
 import Loader from "../Loader";
 import { firestore } from "../../configs/firebase";
 
@@ -9,7 +11,7 @@ const SignalList = ({ route }) => {
   const [signals, setsignals] = useState([]);
   const [lastVisible, setLastVisible] = useState({});
   const [loading, setLoading] = useState(false);
-
+  const [subscription, setSubscription] = useState({ subscribed: 0 });
   const getSignals = () => {
     setLoading(true);
     const signalRef = firestore
@@ -50,9 +52,28 @@ const SignalList = ({ route }) => {
       });
     }
   };
-
+  const checkSubscription = async () => {
+    try {
+      const token = await getData("pushToken");
+      if (token) {
+        const subscriberTokensRef = firestore
+          .collection("groups")
+          .doc(id)
+          .collection("subscriberTokens");
+        subscriberTokensRef.doc(token).onSnapshot((doc) => {
+          console.log("Current data: ", doc.data());
+          let data = doc.data();
+          data = data ? data : {};
+          setSubscription(data);
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     getSignals();
+    checkSubscription();
   }, []);
   if (loading) {
     return <Loader />;
@@ -69,6 +90,38 @@ const SignalList = ({ route }) => {
           return <SignalBox data={data.item} />;
         }}
       />
+      <TouchableOpacity
+    
+        onPress={() => {
+          if (subscription.mute === undefined || subscription.mute === 1) {
+            // this will unmute or subscribe , logic for mute and unmute handled in handlesubscription func.
+            handleSubscription(id);
+          }
+          if (subscription.mute === 0) {
+            handleSubscription(id, true);
+          }
+        }}
+        style={{
+          justifyContent: "center",
+          height: 50,
+          width: "100%",
+          backgroundColor:
+            subscription.mute === 0
+              ? "#e32020"
+              : subscription.mute === 1
+              ? "#385fe0"
+              : "#385fe0",
+          alignItems: "center",
+        }}
+      >
+        <Text style={{ fontSize: 18, color: "white" }}>
+          {subscription.mute === 0
+            ? "Mute"
+            : subscription.mute === 1
+            ? "Unmute"
+            : "Join"}
+        </Text>
+      </TouchableOpacity>
     </>
   );
 };

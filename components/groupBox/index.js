@@ -1,5 +1,11 @@
 import React from "react";
-import { StyleSheet, TouchableOpacity, Text, View, Button } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  View,
+  Button,
+} from "react-native";
 import ShadowBox from "../shadowBox";
 import Image from "../Image";
 import { useNavigation } from "@react-navigation/native";
@@ -26,7 +32,9 @@ const GroupBox = ({ data }) => {
             {data.groupDescription.slice(0, 60) + "...."}
           </Text>
         </View>
-        <Text style={styles.subscribers}>Subscribers : {data.groupSubscribers}</Text>
+        <Text style={styles.subscribers}>
+          Subscribers : {data.groupSubscribers}
+        </Text>
       </ShadowBox>
     </TouchableOpacity>
   );

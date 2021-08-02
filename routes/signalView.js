@@ -9,6 +9,7 @@ import SignalDetail from "../components/signalDetail";
 import { database } from "../configs/firebase";
 import { CacheManager } from "react-native-expo-image-cache";
 import GroupList from "../components/groupList";
+import SignInScreen from "./signin";
 
 const SignalStack = createStackNavigator();
 // import RteContainer from "./rte.style.js";
@@ -45,6 +46,11 @@ const SignalView = () => {
   return (
     <NavigationContainer>
       <SignalStack.Navigator>
+        {/* <SignalStack.Screen
+          name="signin"
+          options={{ title: "Sign in" }}
+          component={SignInScreen}
+        /> */}
         <SignalStack.Screen
           name="menuScreen"
           options={{ title: "Markets" }}

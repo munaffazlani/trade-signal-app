@@ -21,6 +21,7 @@ const SignalDetail = () => {
         <Text style={styles.date}>{data.dateTime}</Text>
         <Text style={styles.shortDesc}>{data.description}</Text>
       </View>
+    
     </ScrollView>
   );
 };
