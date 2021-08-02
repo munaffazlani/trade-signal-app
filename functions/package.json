@@ -15,7 +15,7 @@
   "main": "index.js",
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.15.5",
-    "firebase-admin": "^9.8.0",
+    "firebase-admin": "^9.11.0",
     "firebase-functions": "^3.14.1",
     "node-fetch": "^2.6.1"
   },
