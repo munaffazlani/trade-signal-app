@@ -9,27 +9,6 @@ const GroupList = () => {
   const [lastVisible, setLastVisible] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const getGroups = () => {
-    setLoading(true);
-    const groupRef = firestore
-      .collection("groups")
-      .orderBy("groupSubscribers", "desc")
-      .limit(8);
-    groupRef.onSnapshot((querySnapshot) => {
-      const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
-
-      var groups = [];
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        data.id = doc.id;
-        groups.push(data);
-      });
-      setLoading(false);
-      setGroups(groups);
-      setLastVisible(lastVisible);
-    });
-  };
-
   const getMoreGroups = () => {
     if (lastVisible) {
       const groupRef = firestore
@@ -51,8 +30,24 @@ const GroupList = () => {
   };
 
   useEffect(() => {
-    getGroups();
+    const unsubscribeToGroups = firestore
+      .collection("groups")
+      .orderBy("groupSubscribers", "desc")
+      .limit(8)
+      .onSnapshot((querySnapshot) => {
+        const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+        var groups = [];
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          data.id = doc.id;
+          groups.push(data);
+        });
+        setGroups(groups);
+        setLastVisible(lastVisible);
+      });
+    return () => unsubscribeToGroups();
   }, []);
+
   if (loading) {
     return <Loader />;
   }

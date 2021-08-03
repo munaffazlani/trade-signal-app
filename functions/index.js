@@ -27,6 +27,7 @@ exports.sendPushNotification = functions.firestore
                   to: doc.id,
                   title: newSignal.title,
                   body: newSignal.description,
+                  ios: {sound: true},
                 });
               });
               const url = "https://exp.host/--/api/v2/push/send";
@@ -39,13 +40,7 @@ exports.sendPushNotification = functions.firestore
                 body: JSON.stringify(messages),
               };
               fetch(url, options)
-                  .then((response) => {
-                    if (response.ok) {
-                      return response.json();
-                    }
-                    console.log("req. bad");
-                    reject(new Error("something bad happened"));
-                  })
+                  .then((response) => response.json())
                   .then((responseJson) => {
                     console.log(responseJson);
                     resolve(responseJson);

@@ -12,70 +12,75 @@ const SignalList = ({ route }) => {
   const [lastVisible, setLastVisible] = useState({});
   const [loading, setLoading] = useState(false);
   const [subscription, setSubscription] = useState({ subscribed: 0 });
-  const getSignals = () => {
-    setLoading(true);
-    const signalRef = firestore
-      .collection("groups")
-      .doc(id)
-      .collection("allSignals")
-      .limit(5);
-    signalRef.onSnapshot((querySnapshot) => {
-      const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
 
-      var signals = [];
-      querySnapshot.forEach((doc) => {
-        signals.push(doc.data());
-      });
-      setLoading(false);
-      setsignals(signals);
-      setLastVisible(lastVisible);
-    });
-  };
   const getMoreSignals = () => {
     if (lastVisible) {
-      const signalRef = firestore
+      firestore
         .collection("groups")
         .doc(id)
         .collection("allSignals")
         .startAfter(lastVisible)
-        .limit(5);
+        .limit(5)
+        .get()
+        .then((querySnapshot) => {
+          const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
 
-      signalRef.get().then((querySnapshot) => {
+          var signals = [];
+          querySnapshot.forEach((doc) => {
+            signals.push(doc.data());
+          });
+          setsignals((prev) => [...prev, ...signals]);
+          setLastVisible(lastVisible);
+        });
+    }
+  };
+
+  useEffect(() => {
+    const unsubscribeToSignals = firestore
+      .collection("groups")
+      .doc(id)
+      .collection("allSignals")
+      .limit(5)
+      .onSnapshot((querySnapshot) => {
         const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
 
         var signals = [];
         querySnapshot.forEach((doc) => {
           signals.push(doc.data());
         });
-        setsignals((prev) => [...prev, ...signals]);
+        setLoading(false);
+        setsignals(signals);
         setLastVisible(lastVisible);
       });
-    }
-  };
-  const checkSubscription = async () => {
-    try {
-      const token = await getData("pushToken");
-      if (token) {
-        const subscriberTokensRef = firestore
-          .collection("groups")
-          .doc(id)
-          .collection("subscriberTokens");
-        subscriberTokensRef.doc(token).onSnapshot((doc) => {
-          console.log("Current data: ", doc.data());
-          let data = doc.data();
-          data = data ? data : {};
-          setSubscription(data);
-        });
+    let unsubscribeToSubs;
+    (async () => {
+      try {
+        const token = await getData("pushToken");
+        unsubscribeToSubs =
+          token &&
+          firestore
+            .collection("groups")
+            .doc(id)
+            .collection("subscriberTokens")
+            .doc(token)
+            .onSnapshot((doc) => {
+              console.log("Current data: ", doc.data());
+              let data = doc.data();
+              data = data ? data : {};
+              setSubscription(data);
+              console.log(token, "T");
+            });
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    let isMounted = true;
-    getSignals();
-    checkSubscription();
+    })();
+
+    return () => {
+      unsubscribeToSignals();
+      unsubscribeToSubs?.();
+    };
   }, []);
+
   if (loading) {
     return <Loader />;
   }
