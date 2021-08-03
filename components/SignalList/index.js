@@ -72,6 +72,7 @@ const SignalList = ({ route }) => {
     }
   };
   useEffect(() => {
+    let isMounted = true;
     getSignals();
     checkSubscription();
   }, []);
@@ -91,7 +92,6 @@ const SignalList = ({ route }) => {
         }}
       />
       <TouchableOpacity
-    
         onPress={() => {
           if (subscription.mute === undefined || subscription.mute === 1) {
             // this will unmute or subscribe , logic for mute and unmute handled in handlesubscription func.

@@ -12,33 +12,36 @@ exports.sendPushNotification = functions.firestore
       const newSignal = snap.data();
       const messages = [];
       console.log(newSignal, "newSignal");
-      firestore()
-          .collection("groups")
-          .doc(groupId)
-          .collection("subscriberTokens")
-          .where("mute", "==", 0)
-          .get()
-          .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-              // doc.data() is never undefined for query doc snapshots
-              console.log(doc.id, " => ", doc.data());
-              messages.push({
-                "to": doc.id,
-                "title": newSignal.title,
-                "body": newSignal.description,
+      return new Promise((resolve, reject) => {
+        firestore()
+            .collection("groups")
+            .doc(groupId)
+            .collection("subscriberTokens")
+            .where("mute", "==", 0)
+            .get()
+            .then((querySnapshot) => {
+              querySnapshot.forEach((doc) => {
+                // doc.data() is never undefined for query doc snapshots
+                console.log(doc.id, " => ", doc.data());
+                messages.push({
+                  to: doc.id,
+                  title: newSignal.title,
+                  body: newSignal.description,
+                });
               });
+              fetch("https://exp.host/--/api/v2/push/send", {
+                method: "POST",
+                headers: {
+                  "Accept": "application/json",
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(messages),
+              });
+              resolve(messages);
+            })
+            .catch((error) => {
+              console.log("Error getting documents: ", error);
+              reject(error);
             });
-          })
-          .catch((error) => {
-            console.log("Error getting documents: ", error);
-          });
-      fetch("https://exp.host/--/api/v2/push/send", {
-        method: "POST",
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-
-        },
-        body: JSON.stringify(messages),
       });
     });

@@ -1,25 +1,28 @@
 import React, { useEffect, useRef, useState } from "react";
 // import firebase from "firebase";
-import { registerForPushNotificationsAsync, storeData } from "./utils/asyncStorageMethods";
+import { LogBox } from "react-native";
+
+import { registerForPushNotificationsAsync } from "./utils/asyncStorageMethods";
 import * as Notifications from "expo-notifications";
-import { StyleSheet, Text, View, Button, SafeAreaView } from "react-native";
+import { StyleSheet, SafeAreaView } from "react-native";
 import SignalViewNavigation from "./routes/signalView";
 
-const AuthContext = React.createContext();
+// const AuthContext = React.createContext();
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  }),
-});
+LogBox.ignoreLogs(["Setting a timer"]);
 
 export default function App() {
   const [expoPushToken, setExpoPushToken] = useState("");
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+    }),
+  });
 
   // const [state, dispatch] = React.useReducer(
   //   (prevState, action) => {
@@ -113,7 +116,6 @@ export default function App() {
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
         console.log(response);
-        
       });
 
     return () => {
@@ -139,13 +141,13 @@ const styles = StyleSheet.create({
   },
 });
 
-async function schedulePushNotification() {
-  await Notifications.scheduleNotificationAsync({
-    content: {
-      title: "You've got mail! 📬",
-      body: "Here is the notification body",
-      data: { data: "goes here" },
-    },
-    trigger: { seconds: 2 },
-  });
-}
+// async function schedulePushNotification() {
+//   await Notifications.scheduleNotificationAsync({
+//     content: {
+//       title: "You've got mail! 📬",
+//       body: "Here is the notification body",
+//       data: { data: "goes here" },
+//     },
+//     trigger: { seconds: 2 },
+//   });
+// }
