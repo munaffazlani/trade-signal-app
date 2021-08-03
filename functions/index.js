@@ -29,15 +29,30 @@ exports.sendPushNotification = functions.firestore
                   body: newSignal.description,
                 });
               });
-              fetch("https://exp.host/--/api/v2/push/send", {
+              const url = "https://exp.host/--/api/v2/push/send";
+              const options = {
                 method: "POST",
                 headers: {
                   "Accept": "application/json",
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify(messages),
-              });
-              resolve(messages);
+              };
+              fetch(url, options)
+                  .then((response) => {
+                    if (response.ok) {
+                      return response.json();
+                    }
+                    console.log("req. bad");
+                    reject(new Error("something bad happened"));
+                  })
+                  .then((responseJson) => {
+                    console.log(responseJson);
+                    resolve(responseJson);
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
             })
             .catch((error) => {
               console.log("Error getting documents: ", error);
