@@ -11,7 +11,7 @@ const SignalList = ({ route }) => {
   const [signals, setsignals] = useState([]);
   const [lastVisible, setLastVisible] = useState({});
   const [loading, setLoading] = useState(false);
-  const [subscription, setSubscription] = useState({ subscribed: 0 });
+  const [subscription, setSubscription] = useState({});
 
   const getMoreSignals = () => {
     if (lastVisible) {
@@ -36,6 +36,7 @@ const SignalList = ({ route }) => {
   };
 
   useEffect(() => {
+    setLoading(true);
     const unsubscribeToSignals = firestore
       .collection("groups")
       .doc(id)
